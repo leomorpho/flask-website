@@ -1,0 +1,18 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Olivier's Breads</title>
+      {% else %}
+      <title>Welcome to Olivier's Breads</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Olivier's Breads: 
+            <a href="/index">Home</a>
+            <a href="/login">Login</a>
+        </div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
+
