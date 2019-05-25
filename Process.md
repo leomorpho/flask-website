@@ -112,3 +112,35 @@ migrate = Migrate(app, db)
 
 from app import routes, models
 ~~~
+
+## App factories
+
+Create an app with a config file when blueprints are imported. Multiple instances can thus be created.
+This idea is to setup an application in a function like this:
+~~~py
+def create_app(config_filename):
+    app = Flask(__name__)
+    app.config.from_pyfile(config_filename)
+
+    from yourapplication.model import db
+    db.init_app(app)
+
+    from yourapplication.views.admin import admin
+    from yourapplication.views.frontend import frontend
+    app.register_blueprint(admin)
+    app.register_blueprint(frontend)
+
+    return app
+~~~
+To get access to the app with the config, use `current_app`.
+
+---
+
+## Git
+
+~~~sh
+# To revert to the last commit:
+$ git reset --hard HEAD
+# To revert to a specific commit:
+$ git reset --hard cdcbd82ed0d226d60
+~~~
