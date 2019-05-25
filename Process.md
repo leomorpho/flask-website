@@ -139,8 +139,9 @@ To get access to the app with the config, use `current_app`.
 ## Git
 
 ~~~sh
-# To revert to the last commit:
-$ git reset --hard HEAD
-# To revert to a specific commit:
-$ git reset --hard cdcbd82ed0d226d60
+# Create a new commit that represents exactly the same state of the project as f414f31, 
+# but just adds that on to the history, so you don't lose any history.
+git reset --hard f414f31
+git reset --soft HEAD@{1}
+git commit -m "Reverting to the state of the project at f414f31"
 ~~~
