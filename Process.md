@@ -112,6 +112,71 @@ migrate = Migrate(app, db)
 
 from app import routes, models
 ~~~
+---
+
+## Python Email
+Register the mailing stuff in the config:
+~~~py
+class Config(object):
+    # ...
+    MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    ADMINS = ['your-email@example.com']
+~~~
+
+In `__init__.py` register mail:
+~~~py
+import logging
+from logging.handlers import SMTPHandler
+
+# ...
+
+if not app.debug:
+    if app.config['MAIL_SERVER']:
+        auth = None
+        if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
+            auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+        secure = None
+        if app.config['MAIL_USE_TLS']:
+            secure = ()
+        mail_handler = SMTPHandler(
+            mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
+            fromaddr='no-reply@' + app.config['MAIL_SERVER'],
+            toaddrs=app.config['ADMINS'], subject='Microblog Failure',
+            credentials=auth, secure=secure)
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
+~~~
+
+Start a debugging SMTP server. This server will accept emails, print them to the terminal, but it will not send them.
+~~~sh
+(venv) $ python -m smtpd -n -c DebuggingServer localhost:8025
+~~~
+
+Leave the SMTP server running, then stop your flask app, set 
+
+~~~sh
+export MAIL_SERVER=localhost
+export MAIL_PORT=8025
+export MAIL_DEBUG=0
+~~~
+
+A second approach is to set a real email server. Below is a configuration for a gmail account's web server:
+~~~sh
+export MAIL_SERVER=smtp.googlemail.com
+export MAIL_PORT=587
+export MAIL_USE_TLS=1
+export MAIL_USERNAME=<your-gmail-username>
+export MAIL_PASSWORD=<your-gmail-password>
+~~~
+Gmail security features may prevent the application from sending emails through it unless you explicitly allow "less secure apps" to access your gmail account.
+
+[More info about gmail settings here](https://support.google.com/accounts/answer/6010255?hl=en)
+
+---
 
 ## App factories
 
@@ -145,3 +210,4 @@ git reset --hard f414f31
 git reset --soft HEAD@{1}
 git commit -m "Reverting to the state of the project at f414f31"
 ~~~
+
