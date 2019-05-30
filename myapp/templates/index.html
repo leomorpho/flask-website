@@ -1,12 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if current_user %}
+    {% if current_user.is_authenticated %}
     <h1>Hello, {{ current_user.username }}!</h1>
+        {% if form %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.post.label }}<br>
+                {{ form.post(cols=32, rows=4) }}<br>
+                {% for error in form.post.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>   
+        {% endif %}
     {% else %}
     <h1>Hello there!</h1>
     {% endif %}
+   
+    {# Display posts #}
     {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+        {% include '_post.html' %}
     {% endfor %}
+
+    {# Previous and next page navigation #}
+    {% if prev_url %}
+    <a href="{{ prev_url }}">prev</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">next</a>
+    {% endif %}
+
 {% endblock %}

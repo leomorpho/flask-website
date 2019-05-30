@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{# User information #}
 <table>
     <tr valign="top">
         <td><img src="{{ user.avatar(128) }}"></td>
@@ -14,7 +15,7 @@
             {% endif %}
             {% if user == current_user %}
             <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
-            <{% elif not current_user.is_following(user) %}
+            {% elif not current_user.is_following(user) %}
             <p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
             {% else %}
             <p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
@@ -22,7 +23,18 @@
     </tr>
 </table>
 <hr>
+
+{# Display posts#}
 {% for post in posts %}
-{% include '_post.html' %}
+    {% include '_post.html' %}
 {% endfor %}
+
+{# Previous and next page navigation #}
+{% if prev_url %}
+<a href="{{ prev_url }}">prev</a>
+{% endif %}
+{% if next_url %}
+<a href="{{ next_url }}">next</a>
+{% endif %}
+
 {% endblock %}
