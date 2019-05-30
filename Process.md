@@ -59,9 +59,12 @@ from myapp import routes
 (venv) $ pip install flask-wtf
 ~~~
 
+Form validators that have the form (no pun intended) `validate_X` validate the `X` property of the form.
+e.g.: `validate_username` is automatically called for a `username` property of a form.
+
 ---
 ## Database
-
+### Database Intro
 ~~~sh
 (venv) $ pip install flask-sqlalchemy
 (venv) $ pip install flask-migrate
@@ -112,6 +115,9 @@ migrate = Migrate(app, db)
 
 from app import routes, models
 ~~~
+
+The representation of a **many-to-many relationship** requires the use of an **auxiliary table** called an association table.
+
 ---
 
 ## Python Email
@@ -156,7 +162,7 @@ Start a debugging SMTP server. This server will accept emails, print them to the
 (venv) $ python -m smtpd -n -c DebuggingServer localhost:8025
 ~~~
 
-Leave the SMTP server running, then stop your flask app, set 
+Leave the SMTP server running, then stop your flask app, set
 
 ~~~sh
 export MAIL_SERVER=localhost
@@ -204,7 +210,7 @@ To get access to the app with the config, use `current_app`.
 ## Git
 
 ~~~sh
-# Create a new commit that represents exactly the same state of the project as f414f31, 
+# Create a new commit that represents exactly the same state of the project as f414f31,
 # but just adds that on to the history, so you don't lose any history.
 git reset --hard f414f31
 git reset --soft HEAD@{1}
