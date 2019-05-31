@@ -19,6 +19,10 @@ mail = Mail(app)
 # that user be logged-in.
 login.login_view = 'login'
 
+# Register Blueprints
+from myapp.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
 # If not in debug mode, log all errors
 if not app.debug:
     # Emailing
@@ -52,4 +56,4 @@ if not app.debug:
 
 
 # from myapp must be at the bottom of __init__ to avoid circular imports!!!
-from myapp import routes, models, errors
+from myapp import routes, models
