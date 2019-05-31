@@ -26,6 +26,9 @@ app.register_blueprint(errors_bp)
 from myapp.auth import bp as auth_bp
 app.register_blueprint(auth_bp, url_prefix='/auth')
 
+from myapp.main import bp as main_bp
+app.register_blueprint(main_bp)
+
 # If not in debug mode, log all errors
 if not app.debug:
     # Emailing
@@ -59,4 +62,4 @@ if not app.debug:
 
 
 # from myapp must be at the bottom of __init__ to avoid circular imports!!!
-from myapp import models, routes
+from myapp import models
