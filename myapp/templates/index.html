@@ -21,15 +21,8 @@
     {% endif %}
     {# Display posts #}
     {% for post in posts %}
-        {% include '_post.html' %}
+        {% include 'shared/_post.html' %}
     {% endfor %}
 
-    {# Previous and next page navigation #}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">prev</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">next</a>
-    {% endif %}
 
 {% endblock %}
