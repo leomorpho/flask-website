@@ -108,6 +108,20 @@ class Post(db.Model):
         return '<Post {}>'.format(self.body)
 
 
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db .Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    description = db.Column(db.String(140))
+    thumbnail = db.Column(db.String(256))
+    # images = db.rel   # can have many images: one-to-many
+    # group = db.rel    # can be part of many groups: many-to-many
+    # ingredients       # many-to-many
+    weight = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Product {}>'.format(self.name)
+
 # Implement the following:
 # Tags for posts
 # Groups for users
