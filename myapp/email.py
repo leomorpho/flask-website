@@ -1,7 +1,7 @@
 from flask_mail import Message
-from flask import render_template
 from threading import Thread
-from myapp import mail, app
+from myapp import mail
+from flask import current_app
 
 
 def send_async_email(app, msg):
@@ -28,4 +28,5 @@ def send_email(subject, sender, recipients, text_body, html_body):
     # stored in the app.config object.
     # In this case here, flask-mail need to access config settings
     # for the email server stored in app.config.
-    Thread(target=send_async_email, args=(app, msg)).start()
+    Thread(target=send_async_email,
+           args=(current_app._get_current_object(), msg)).start()

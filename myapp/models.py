@@ -1,10 +1,11 @@
 from datetime import datetime
+from flask import current_app
 from time import time
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
-from myapp import app, db, login
+from myapp import db, login
 
 
 @login.user_loader
@@ -81,7 +82,7 @@ class User(UserMixin, db.Model):
         # a string for convenience.
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
 
     # Static methods can be invoked directly from the class, and do not
     # receive the class as an argument.
@@ -90,7 +91,7 @@ class User(UserMixin, db.Model):
         # If token is valid, payload is valid and value of reset_password
         # can be used to load the user.
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except:
             return
