@@ -36,6 +36,9 @@ def create_app(config_class=Config):
     from myapp.main import bp as main_bp
     app.register_blueprint(main_bp)
 
+    from myapp.store import bp as store_bp
+    app.register_blueprint(store_bp)
+
     # If not in debug mode, log all errors
     if not app.debug and not app.testing:
         # Emailing
