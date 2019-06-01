@@ -66,7 +66,7 @@ def create_app(config_class=Config):
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')
+        app.logger.info(app.config['APP_NAME'] + 'startup')
 
     return app
 
