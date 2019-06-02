@@ -1,7 +1,13 @@
+<ul class="pagination">
 {# Previous and next page navigation #}
 {% if prev_url %}
-<a href="{{ prev_url }}">prev</a>
+    <li class="page-item">
+        <a href="{{ prev_url }}">prev</a>
+    </li>
 {% endif %}
 {% if next_url %}
-<a href="{{ next_url }}">next</a>
+    <li class="page-item">
+        <a href="{{ next_url }}">next</a>
+    </li>
 {% endif %}
+</ul>
