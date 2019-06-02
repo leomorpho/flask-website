@@ -5,9 +5,9 @@
     {% else %}
         <title>Welcome to Olivier's Breads</title>
     {% endif %}
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+        <!-- Add Bootstrap and Bootstrap-Vue CSS to the <head> section -->
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"/>
     </head>
     <body>
          
@@ -51,6 +51,10 @@
         
         {# Previous and next page navigation #}
         {% include 'shared/_prev_next_page.html' %}
+
+        <!-- Add Vue and Bootstrap-Vue JS just before the closing </body> tag -->
+        <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     </body>
 </html>
 
