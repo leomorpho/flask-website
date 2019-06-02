@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_admin import Admin
 import logging
 from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
@@ -13,6 +14,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 mail = Mail()
+admin = Admin()
 # login_view is used by LoginManager for pages that require
 # that user be logged-in.
 login.login_view = 'login'
@@ -22,10 +24,15 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    # Flask-Bootstrap optional bootswatch theme
+    app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'
+
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)
+    admin.init_app(app)
+
     # Register Blueprints
     from myapp.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
@@ -38,6 +45,9 @@ def create_app(config_class=Config):
 
     from myapp.store import bp as store_bp
     app.register_blueprint(store_bp, url_prefix='/store')
+
+    from myapp.admin import bp as admin_bp
+    app.register_blueprint(admin_bp)
 
     # If not in debug mode, log all errors
     if not app.debug and not app.testing:
