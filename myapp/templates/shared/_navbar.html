@@ -1,0 +1,25 @@
+<div class="block">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <h1 class="title is-4">Olivier's Breads</h1>
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <a href="{{ url_for('main.index') }}" class="nav-item">Home</a>
+            <a href="{{ url_for('store.store') }}" class="nav-item">Store</a>
+            <a href="{{ url_for('main.about') }}" class="nav-item">About Us</a>
+        </div>
+
+        <div class="nav-right">
+            {% if current_user.is_anonymous %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-link">Login</a>
+            {% else %}
+                <a href="{{ url_for('main.user', username=current_user.username) }}" class="btn btn-link">Profile</a>
+                <a href="{{ url_for('main.explore') }}" class="btn btn-link">Explore</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-link">Logout</a>
+            {% endif %}
+        </div>
+    </nav>
+</div>

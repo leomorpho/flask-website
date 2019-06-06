@@ -1,10 +1,18 @@
-<table>
-    <tr valign="top">
-        <td><img src="{{ post.author.avatar(36) }}" class="avatar avatar-lg"></td>
-        <td>
+<article class="media center container">
+    <figure class="media-left">
+        <span class="image is-36x36">
+            <img src="{{ post.author.avatar(36) }}">
+        </span>
+    </figure>
+    <div class="media-content">
+        <div class="content">
+            <p>
             <a href="{{url_for('main.user', username=post.author.username)}}">
-                {{ post.author.username }}
-            </a> 
-            says:<br>{{ post.body }}</td>
-    </tr>
-</table>
+                <strong>{{ post.author.username }}</strong> says:<br>
+            </a>
+                <span class="has-text-grey">{{ post.body }}<br>
+                    <time datetime="2018-04-20">{{ post.timestamp }}</time></span>
+            </p>
+        </div>
+    </div>
+</article>

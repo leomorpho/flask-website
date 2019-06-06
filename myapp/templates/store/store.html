@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Welcome to our store</h1>
+    <h1 class="title">Welcome to our store</h1>
 
     {% if products %}
-        <div class="columns col-9 col-mx-auto">
         {% for product in products %}
             {% include "shared/_product.html" ignore missing %}
         {% endfor %}
-        </div>
     {% endif %}
 {% endblock %}
