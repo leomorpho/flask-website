@@ -1,60 +1,60 @@
 <html>
     <head>
-    {% if title %}
-        <title>{{ title }} - Olivier's Breads</title>
-    {% else %}
-        <title>Welcome to Olivier's Breads</title>
-    {% endif %}
+        {% if title %}
+            <title>{{ title }} - Olivier's Breads</title>
+        {% else %}
+            <title>Welcome to Olivier's Breads</title>
+        {% endif %}
         <!-- Add Bootstrap and Bootstrap-Vue CSS to the <head> section -->
         <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
         <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"/>
-    </head>
-    <body>
-         
-        <header class="navbar bg-gray">
-            <section class="navbar-section">
-                <a href="{{ url_for('main.index') }}" class="btn btn-link">Home</a>
-                <a href="{{ url_for('store.store') }}" class="btn btn-link">Store</a>
-            </section>
+        </head>
+        <body>
+            <header class="navbar bg-gray">
+                <section class="navbar-section">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-link">Home</a>
+                    <a href="{{ url_for('store.store') }}" class="btn btn-link">Store</a>
+                </section>
 
-            {# centered logo here#}
+                {# centered logo here#}
 
-            <section class="navbar-section">
-            {% if current_user.is_anonymous %}
-                <a href="{{ url_for('auth.login') }}" class="btn btn-link">Login</a>
-            {% else %}
-                <a href="{{ url_for('main.user', username=current_user.username) }}" class="btn btn-link">Profile</a>
-                <a href="{{ url_for('main.explore') }}" class="btn btn-link">Explore</a>
-                <a href="{{ url_for('auth.logout') }}" class="btn btn-link">Logout</a>
-            {% endif %}
-            </section>
-        </header>
-        
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-			<div class="toast toast-success>
-            <li>{{ message }}</li>
-			</div>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
+                <section class="navbar-section">
+                    {% if current_user.is_anonymous %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-link">Login</a>
+                    {% else %}
+                        <a href="{{ url_for('main.user', username=current_user.username) }}" class="btn btn-link">Profile</a>
+                        <a href="{{ url_for('main.explore') }}" class="btn btn-link">Explore</a>
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-link">Logout</a>
+                    {% endif %}
+                </section>
+            </header>
 
-        <div class="container" id="app">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div class="toast toast-success>
+                                <li>{{ message }}</li>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <div class="container" id="app">
             {# 'column' class should be added to  container inside the 'container' class #}
             <div class="column col-12">
-                {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
             </div>
-        </div>
-        
-        {# Previous and next page navigation #}
-        {% include 'shared/_prev_next_page.html' %}
+            </div>
 
-        <!-- Add Vue and Bootstrap-Vue JS just before the closing </body> tag -->
-        <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
-        <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
-    </body>
+{# Previous and next page navigation #}
+{% include 'shared/_prev_next_page.html' %}
+<!-- Add Vue and Bootstrap-Vue JS just before the closing </body> tag -->
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+{# Vuejs app #}
+<script src="../frontend/vuejs/src/main.js"></script>
+</body>
 </html>
 

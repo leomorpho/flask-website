@@ -4,6 +4,7 @@ from myapp.models import Product
 from myapp.store import bp
 from myapp.store.forms import CreateNewProductForm
 
+
 @bp.route('/')
 @bp.route('/store')
 def store():
@@ -12,14 +13,12 @@ def store():
     return render_template('store/store.html',
                            title='Store', products=products)
 
-
-@bp.route('/create_product', methods=['GET', 'POST'])
-@login_required
-def create_product():
-    form = CreateNewProductForm()
+# @bp.route('/create_product', methods=['GET', 'POST'])
+# @login_required
+# def create_product():
+#     form = CreateNewProductForm()
 
 # @bp.route('/store/<product_name>')
 # def store(product_name):
 #     product = Product.query.filter_by(name=product_name).first_or_404()
 #     return render_template('index.html', title='Store')
-
