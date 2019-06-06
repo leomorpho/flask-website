@@ -12,11 +12,10 @@ def store():
     return render_template('store/index.html',
                            title='Store', products=products)
 
-
-@bp.route('/create_product', methods=['GET', 'POST'])
-@login_required
-def create_product():
-    form = CreateNewProductForm()
+# @bp.route('/create_product', methods=['GET', 'POST'])
+# @login_required
+# def create_product():
+#     form = CreateNewProductForm()
 
 # @bp.route('/store/<product_name>')
 # def store(product_name):
