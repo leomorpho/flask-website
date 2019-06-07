@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="hero">
-        <div class="hero-body">
+<style scoped>
+</style>
+
+    <section class="hero is-fullheight">
+        <div class="hero-body layer">
             <div class="container">
                 <figure class="image center">
-                    <img src="https://tinyurl.com/y262pwu8" alt="Image of Paris" style="max-width: 350px;">
+                    <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Logo" style="max-width: 200px;">
                 </figure>
             </div>
         </div>
@@ -42,8 +45,19 @@
         </div>
     </section>
 
+    <section class="section">
+        <div class="content is-large notification container">
+            <p>
+                The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
+To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it. For code execution mouse-over the frame you want to debug and click on the console icon on the right side.
+            </p>
+        </div>
+    </section>
 
 
+    <section class="hero is-fullheight">
+
+    </section>
 
 
 

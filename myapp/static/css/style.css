@@ -1,5 +1,18 @@
+/* a stupid comment */
 .center {
     display:flex;
     justify-content: center;
     align-items: center;
 }
+
+.hero {
+    background: url(../images/paris-view.png) center / cover;
+}
+
+/* Make the hero background image opaque */
+.layer {
+    background-color: rgba(300, 300, 300, 0.5);
+    width: 100%;
+    height: 100%;
+}
+
