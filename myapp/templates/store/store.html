@@ -15,12 +15,13 @@
             </div>
         </section>
 
-        <section class="container">
+        <section class="container products">
             {% if products %}
                 {% for product in products %}
                     {% include "shared/_product.html" ignore missing %}
                 {% endfor %}
             {% endif %}
         </section>
+
     </section>
 {% endblock %}
