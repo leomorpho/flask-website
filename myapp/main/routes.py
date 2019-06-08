@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, \
-        request, current_app
+    request, current_app
 from flask_login import current_user, login_required
 from datetime import datetime
 from myapp import db
@@ -46,6 +46,11 @@ def index():
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
+
+
+@bp.route('/about')
+def about():
+    return render_template('about.html', title='Home')
 
 
 @bp.route('/user/<username>')
@@ -151,11 +156,6 @@ def patisserie():
 @bp.route('/bistro')
 def bistro():
     return render_template('index.html', title='Bistro')
-
-
-@bp.route('/about')
-def about():
-    return render_template('index.html', title='About')
 
 
 @bp.route('/contactUs')

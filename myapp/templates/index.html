@@ -1,32 +1,64 @@
-{% extends "base.html" %}
+{% extends "shared/root.html" %}
 
-{% block content %}
-{% if current_user.is_authenticated %}
-<h1>Hello, {{ current_user.username }}!</h1>
-{% if form %}
-<div class="form-group">
+{% block page %}
 
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            {% for error in form.post.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-</div>
-{% endif %}
-{% else %}
-<h1>Hello there!</h1>
-{% endif %}
+    <section class="hero hero-home-1 is-fullheight is-flex">
+        <div class="hero-head">
+            {% include "shared/_navbar.html" %}
+        </div>
+        <figure class="image center hero-body">
+            <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Logo" style="max-width: 200px;">
+        </figure>
+    </section>
 
-{# Display posts #}
-{% for post in posts %}
-{% include 'shared/_post.html' %}
-{% endfor %}
+    {% include 'shared/_flashed_messages.html' %}
 
+    <section class="section has-background-light">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div class="notification is-info">
+                        <h1 class="title is-size-4">Leavening</h1>
+                        <p class="is-size-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="notification is-primary">
+                        <h1 class="title is-size-4">Fermentation</h1>
+                        <p class="is-size-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="notification is-warning">
+                        <h1 class="title is-size-4">Natural Ingredients</h1>
+                        <p class="is-size-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <section class="hero hero-home-2 is-medium">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title has-text-white">
+                    Primary bold title
+                </h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="content is-large notification container">
+            <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </section>
 {% endblock %}

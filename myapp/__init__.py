@@ -18,7 +18,7 @@ mail = Mail()
 admin = Admin()
 # login_view is used by LoginManager for pages that require
 # that user be logged-in.
-login.login_view = 'login'
+login.login_view = 'auth.login'
 
 pusher = pusher.Pusher(
     app_id=os.getenv('PUSHER_APP_ID'),

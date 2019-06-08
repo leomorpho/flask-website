@@ -1,0 +1,30 @@
+/*-----------------
+ * Hero parallax
+ * ---------------*/
+/*-----------------
+ * Hero
+ * ---------------*/
+.flex-top {
+	
+}
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-home-1 {
+	background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.2)),
+	/* Make the hero background image opaque */
+/*    linear-gradient(rgba(300,300,300,.5), rgba(300,300,300,.5)),*/
+    url(../images/paris-view.png) center / cover;
+}
+@media (max-width: 1024px) { .hero { url(../images/paris-view.png) center / cover; } }
+@media (max-width: 768px) { .hero { url(../images/paris-view.png) center / cover; }}
+
+.hero-home-2 {
+	background: /*radial-gradient(rgba(255,255,255,0), rgba(255,255,255,0.7)),*/
+	/* Make the hero background image opaque */
+    url(../images/hero-home-2.jpeg) center / cover;
+}
+@media (max-width: 1024px) { .hero { url(../images/paris-view.png) center / cover; } }
+@media (max-width: 768px) { .hero { url(../images/paris-view.png) center / cover; }}

@@ -1,0 +1,30 @@
+<div class="hero-head">
+	<div class="columns is-mobile is-marginless heading has-text-weight-bold">
+		<div class="column left">
+            <a href="{{ url_for('main.index') }}">
+                <figure class="navbar-item">
+                    <img src="{{ url_for('static', filename='images/logo-with-no-background.png') }}" alt="Olivier's Breads Logo">
+				</figure><Paste>
+            </a>
+		</div>
+		<div class="column center desktop">
+            <a href="{{ url_for('main.index') }}"><p class="navbar-item has-text-black">Home</p></a>
+            <a href="{{ url_for('store.store') }}"><p class="navbar-item has-text-black">Store</p></a>
+            <a href="{{ url_for('main.about') }}"><p class="navbar-item has-text-black">About Us</p></a>
+		</div>
+		<div class="column right">
+            {% if current_user.is_anonymous %}
+                <p class="navbar-item desktop"><a href="{{ url_for('auth.login') }}">Login</a></p>
+            {% else %}
+                <a href="{{ url_for('main.user', username=current_user.username) }}"><p class="navbar-item desktop has-text-black">Profile</p></a>
+                <a href="{{ url_for('main.explore') }}"><p class="navbar-item desktop has-text-black">Explore</p></a>
+                <a href="{{ url_for('auth.logout') }}"><p class="navbar-item desktop has-text-black">Logout</p></a>
+                <a role="button" class="navbar-burger mobile" aria-label="menu" aria-expanded="true">
+				  	<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+			  	</a>
+            {% endif %}
+		</div>
+	</div>
+</div>
