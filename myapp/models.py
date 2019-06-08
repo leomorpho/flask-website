@@ -109,19 +109,26 @@ class Post(db.Model):
 
 
 class Product(db.Model):
-    __tablename__ = 'products'
     id = db .Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
     thumbnail = db.Column(db.String(256))
-    # images = db.rel   # can have many images: one-to-many
-    # group = db.rel    # can be part of many groups: many-to-many
-    # ingredients       # many-to-many
+    # many-to-one: can be
+    # boulangerie, patisserie, viennoiserie, salted, drinks, other
+    # If more categories are added, the db products must be updated to
+    # reflect the best descripting category
+    category_id = db.Column(db.Integer, db.ForeignKey('product_category.id'))
     weight = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Product {}>'.format(self.name)
 
+
+class ProductCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    description = db.Column(db.String(140))
+    products = db.relationship('Product', backref='category', lazy='dynamic')
 # Implement the following:
 # Tags for posts
 # Groups for users
