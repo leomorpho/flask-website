@@ -1,5 +1,6 @@
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_login import login_required
 from flask import current_app
 from myapp import db, admin
 from myapp.models import User, Post, Product

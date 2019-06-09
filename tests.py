@@ -1,29 +1,21 @@
+#!/usr/bin/env python
 from datetime import datetime, timedelta
 import unittest
-from myapp import db
-from myapp import create_app
+from myapp import create_app, db
 from myapp.models import User, Post
 from config import Config
 
 
 class TestConfig(Config):
-    ESTING = True
+    TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
 class UserModelCase(unittest.TestCase):
-    # setup and teardown methods are from unittest, and
-    # are executed automatically.
     def setUp(self):
         self.app = create_app(TestConfig)
-        # db.create_all() needs to know what app to use to create
-        # a db. Since an application factory is not limited to a single
-        # app, the app_context must be provided. The app_context looks for
-        # an active app in the current thread, and if it finds one, it gets
-        # the app from it. If there are none, it raises an exception.
         self.app_context = self.app.app_context()
         self.app_context.push()
-        # Create all the database tables:
         db.create_all()
 
     def tearDown(self):
@@ -103,6 +95,19 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f2, [p2, p3])
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
+
+
+class ProductModelCase(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app(TestConfig)
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
 
 if __name__ == '__main__':

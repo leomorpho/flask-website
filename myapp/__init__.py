@@ -15,7 +15,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 mail = Mail()
-admin = Admin()
+# admin = Admin()
 # login_view is used by LoginManager for pages that require
 # that user be logged-in.
 login.login_view = 'auth.login'
@@ -39,7 +39,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)
-    admin.init_app(app)
+#     admin.init_app(app)
 
     # Register Blueprints
     from myapp.errors import bp as errors_bp
@@ -54,8 +54,8 @@ def create_app(config_class=Config):
     from myapp.store import bp as store_bp
     app.register_blueprint(store_bp, url_prefix='/store')
 
-    from myapp.admin import bp as admin_bp
-    app.register_blueprint(admin_bp)
+#     from myapp.admin import bp as admin_bp
+#     app.register_blueprint(admin_bp)
 
     # If not in debug mode, log all errors
     if not app.debug and not app.testing:
@@ -71,7 +71,8 @@ def create_app(config_class=Config):
             mail_handler = SMTPHandler(
                 mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                 fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-                toaddrs=app.config['ADMINS'], subject='Olivier\'s Breads Failure',
+                toaddrs=app.config['ADMINS'],
+                subject='Olivier\'s Breads Failure',
                 credentials=auth, secure=secure)
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
@@ -82,12 +83,13 @@ def create_app(config_class=Config):
         file_handler = RotatingFileHandler(
             'logs/website.log', maxBytes=10240, backupCount=10)
         file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+            '%(asctime)s %(levelname)s: \
+                    %(message)s [in %(pathname)s:%(lineno)d]'))
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info(app.config['APP_NAME'] + 'startup')
+        app.logger.info("%s startup" % (app.config['APP_NAME']))
 
     return app
 
