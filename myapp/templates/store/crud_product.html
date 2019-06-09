@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="container">
-        <h1 class="is-size-4">Add Product</h1>
+        <h1 class="is-size-4">{{ title }}</h1>
         {% from "shared/_macros.html" import render_field %}
         <form action="" method=post>
             {{ form.hidden_tag() }}

@@ -2,8 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from myapp.models import Product, ProductCategory
 from myapp.store import bp
-from myapp.store.forms import CreateNewProductForm, \
-        EditProductForm
+from myapp.store.forms import ProductForm
 from myapp import db
 
 
@@ -15,11 +14,11 @@ def store():
                            title='Store', products=products)
 
 
-@bp.route('/create_product', methods=['GET', 'POST'])
+@bp.route('/add', methods=['GET', 'POST'])
 @login_required
 def create_product():
     categories = ProductCategory.query.order_by('name')
-    form = CreateNewProductForm()
+    form = ProductForm()
     form.category.choices = [(c.id, c.name) for c in categories]
 #     if request.method == 'POST':
 #         category = ProductCategory.query.filter_by(
@@ -27,7 +26,7 @@ def create_product():
 #         return 'Name: {}, Category: {}'.format(form.name.data, category.name)
     if form.validate_on_submit():
         category = ProductCategory.query.filter_by(
-                id=form.category.data).first()
+            id=form.category.data).first()
         product = Product(
             name=form.name.data,
             description=form.description.data,
@@ -41,9 +40,37 @@ def create_product():
         db.session.commit()
         flash('Your product has been added!')
         return redirect(url_for('store.store'))
-    return render_template('store/create_product.html',
-                           form=form)
+    return render_template('store/crud_product.html',
+                           form=form, title='Add Product')
 
+
+@bp.route('/edit/<productname>', methods=['GET', 'POST'])
+@login_required
+def edit_product(productname):
+    product = Product.query.filter_by(name=productname).first_or_404()
+    categories = ProductCategory.query.order_by('name')
+    form = EditProductForm(product)
+    form.category.choices = [(c.id, c.name) for c in categories]
+#     if request.method == 'POST':
+#         category = ProductCategory.query.filter_by(
+#                 id=form.category.data).first()
+#         return 'Name: {}, Category: {}'.format(form.name.data, category.name)
+    if form.validate_on_submit():
+        category = ProductCategory.query.filter_by(
+            id=form.category.data).first()
+        product.name = form.name.data,
+        product.description = form.description.data,
+        # image=form.image.data,
+        # Create a method to make a thumbnail from a full image?
+        # thumbnail=
+        # Not sure about how to add category to a new product
+        product.category = category,
+        product.weight = form.weight.data
+        db.session.commit()
+        flash('Your product has been added!')
+        return redirect(url_for('store.store'))
+    return render_template('store/edit_product.html',
+                           form=form, title='Update Product')
 
 # @bp.route('/create_product', methods=['GET', 'POST'])
 # @login_required

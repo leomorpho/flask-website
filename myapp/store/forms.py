@@ -1,26 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SubmitField, \
+from wtforms import StringField, SubmitField, \
     IntegerField, SelectField
 from wtforms.validators import ValidationError, DataRequired
 from myapp.models import Product
 
 
 class ProductForm(FlaskForm):
-    name = StringField('Product Name', validators=[DataRequired()])
-    description = StringField('Product Description',
-                              validators=[DataRequired()])
-    # image = check file upload for flask-form
-    category = SelectField('Category', coerce=int)
-    weight = IntegerField('Weight (grams)', validators=[DataRequired()])
-
-    def validate_name(self, name):
-        product = Product.query.filter_by(name=name.data).first()
-        if product is not None:
-            raise ValidationError('Product name already in use. \
-                    Please use a different one.')
-
-
-class CreateNewProductForm(FlaskForm):
+    """
+    Form for admin to add or delete a product
+    """
     #    product = FormField(ProductForm)
     name = StringField('Product Name', validators=[DataRequired()])
     description = StringField('Product Description',
@@ -28,7 +16,7 @@ class CreateNewProductForm(FlaskForm):
     # image = check file upload for flask-form
     category = SelectField('Category', coerce=int)
     weight = IntegerField('Weight (grams)', validators=[DataRequired()])
-    submit = SubmitField('Create Product')
+    submit = SubmitField('Submit')
 
     def validate_name(self, name):
         product = Product.query.filter_by(name=name.data).first()
@@ -37,26 +25,41 @@ class CreateNewProductForm(FlaskForm):
                     Please use a different one.')
 
 
-class EditProductForm(FlaskForm):
-    name = StringField('Product Name', validators=[DataRequired()])
-    description = StringField('Product Description',
-                              validators=[DataRequired()])
-    # image = check file upload for flask-form
-    category = SelectField('Category')
-    weight = IntegerField('Weight (grams)', validators=[DataRequired()])
-    submit = SubmitField('Create Product')
-
-    def validate_name(self, name):
-        product = Product.query.filter_by(name=name.data).first()
-        if product is not None:
-            raise ValidationError('Product name already in use. \
-                    Please use a different one.')
-#     def validate_username(self, username):
-#         user = User.query.filter_by(username=username.data).first()
-#         if user is not None:
-#             raise ValidationError('Please use a different username.')
+# class CreateNewProductForm(FlaskForm):
+#     #    product = FormField(ProductForm)
+#     name = StringField('Product Name', validators=[DataRequired()])
+#     description = StringField('Product Description',
+#                               validators=[DataRequired()])
+#     # image = check file upload for flask-form
+#     category = SelectField('Category', coerce=int)
+#     weight = IntegerField('Weight (grams)', validators=[DataRequired()])
+#     submit = SubmitField('Create Product')
 #
-#     def validate_email(self, email):
-#         user = User.query.filter_by(email=email.data).first()
-#         if user is not None:
-#             raise ValidationError('Please use a different email address.')
+#     def validate_name(self, name):
+#         product = Product.query.filter_by(name=name.data).first()
+#         if product is not None:
+#             raise ValidationError('Product name already in use. \
+#                     Please use a different one.')
+#
+#
+# class EditProductForm(FlaskForm):
+#     name = StringField('Product Name', validators=[DataRequired()])
+#     description = StringField('Product Description',
+#                               validators=[DataRequired()])
+#     # image = check file upload for flask-form
+#     category = SelectField('Category', coerce=int)
+#     weight = IntegerField('Weight (grams)', validators=[DataRequired()])
+#     submit = SubmitField('Update Product')
+#
+#     def __init__(self, original_specs, *args, **kwargs):
+#         super(EditProductForm, self).__init__(*args, **kwargs)
+#         # original product specs saved as instance variables
+#         self.original_name = original_specs.name
+#
+#     def validate_name(self, name):
+#         if name.data != self.original_name:
+#             product = Product.query.filter_by(
+#                 name=self.name.data).first()
+#             if product is not None:
+#                 raise ValidationError('Product name already in use. \
+#                         Please use a different one.')
