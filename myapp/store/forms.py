@@ -1,19 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, \
-    BooleanField, SubmitField
+from wtforms import StringField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, \
     Email, EqualTo, Length
-from myapp.models import User
 
 
 class CreateNewProductForm(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[
-                             DataRequired(), Length(min=9, max=100)])
-    password3 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    description = StringField('Product Description',
+                              validators=[DataRequired()])
+    # image = check file upload for flask-form
+    # category = StringField('Category',
+    #                       validators=[DataRequired()])
+    weight = IntegerField('Weight (grams)', validators=[DataRequired()])
+    submit = SubmitField('Create Product')
 
 #     def validate_username(self, username):
 #         user = User.query.filter_by(username=username.data).first()
