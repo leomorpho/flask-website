@@ -44,12 +44,12 @@ def create_product():
                            form=form, title='Add Product')
 
 
-@bp.route('/edit/<productname>', methods=['GET', 'POST'])
+@bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_product(productname):
-    product = Product.query.filter_by(name=productname).first_or_404()
+def edit_product(id):
+    product = Product.query.get_or_404(id)
     categories = ProductCategory.query.order_by('name')
-    form = EditProductForm(product)
+    form = ProductForm(obj=product)
     form.category.choices = [(c.id, c.name) for c in categories]
 #     if request.method == 'POST':
 #         category = ProductCategory.query.filter_by(
@@ -67,10 +67,15 @@ def edit_product(productname):
         product.category = category,
         product.weight = form.weight.data
         db.session.commit()
-        flash('Your product has been added!')
+        flash('Your product has been updated!')
         return redirect(url_for('store.store'))
-    return render_template('store/edit_product.html',
-                           form=form, title='Update Product')
+    form.name.data = product.name
+    form.description.data = product.description
+    form.category.data = product.category
+    form.weight.data = product.weight
+    return render_template('store/crud_product.html',
+                           form=form, product=product,
+                           title='Update Product')
 
 # @bp.route('/create_product', methods=['GET', 'POST'])
 # @login_required
