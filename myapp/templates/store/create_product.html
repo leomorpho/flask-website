@@ -1,30 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Add Product</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=32) }}<br>
-            {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description(cols=50, rows=4) }}<br>
-            {% for error in form.description.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.weight.label }}<br>
-            {{ form.weight(size=10) }}<br>
-            {% for error in form.weight.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+
+    <div class="container">
+        <h1 class="is-size-4">Add Product</h1>
+        {% from "shared/_macros.html" import render_field %}
+        <form action="" method=post>
+            {{ form.hidden_tag() }}
+          <dl>
+            {{ render_field(form.name) }}
+            {{ render_field(form.description) }}
+            {{ render_field(form.category) }}
+            {{ render_field(form.weight) }}
+          </dl>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
 {% endblock %}
