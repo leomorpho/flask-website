@@ -1,31 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
+    <div class="container">
+        <h1 class="is-size-4">Sign In</h1>
+        {% from "shared/_macros.html" import render_field %}
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+            <dl>
+                {{ render_field(form.username, class="input", placeholder="Your username") }}
+                {{ render_field(form.password, class="input", placeholder="Your password") }}
+                {{ render_field(form.submit, class="button is-link") }}
+            </dl>
+        </form>
+        {# Register as a user #}
+        <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+        {# Forgot your login? Get a new one by email #}
         <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}<Paste>
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    {# Register as a user #}
-	<p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
-    {# Forgot your login? Get a new one by email #}
-    <p>
         Forgot Your Password?
         <a href="{{ url_for('auth.reset_password_request') }}">Click to Reset It</a>
-    </p>
+        </p>
+    </div>
 {% endblock %}

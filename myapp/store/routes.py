@@ -1,5 +1,5 @@
-from flask import render_template, flash, redirect, url_for, request
-from flask_login import current_user, login_required
+from flask import render_template, flash, redirect, url_for
+from flask_login import login_required
 from myapp.models import Product, ProductCategory
 from myapp.store import bp
 from myapp.store.forms import ProductForm

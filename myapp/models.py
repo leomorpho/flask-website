@@ -5,7 +5,6 @@ import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
-from sqlalchemy.orm import validates
 from myapp import db, login
 
 
@@ -84,7 +83,8 @@ class User(UserMixin, db.Model):
         # a string for convenience.
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
-            current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            current_app.config['SECRET_KEY'],
+            algorithm='HS256').decode('utf-8')
 
     # Static methods can be invoked directly from the class, and do not
     # receive the class as an argument.
@@ -103,10 +103,20 @@ class User(UserMixin, db.Model):
 
 
 class Role(db.Model):
+    """
+    Role table. A role has an authority number associated to
+    it(rank), such that 3 has more power than 4. Authority numbers
+    can be updated to reflect new roles required by the application.
+    Existing role in order of power are:
+    -admin
+    -customer
+    Roles in the app are simply seen as their name, but their
+    associated rank is what is important.
+    """
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
-
-# Define the UserRoles association table
+    description = db.Column(db.String(280))
+    rank = db.Column(db.Integer())
 
 
 class UserRoles(db.Model):

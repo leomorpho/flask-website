@@ -4,4 +4,4 @@ from flask import Blueprint
 # default bp
 bp = Blueprint('admin_panel', __name__)
 
-from myapp.admin import routes
+from myapp.admin import routes, forms

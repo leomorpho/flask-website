@@ -1,12 +1,19 @@
 {% macro render_field(field) %}
-<dt>{{ field.label }}
-<dd>{{ field(**kwargs)|safe }}
-{% if field.errors %}
-    <ul class=errors>
-        {% for error in field.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </ul>
-{% endif %}
-</dd>
+<div class="field">
+    {% if field.type not in ('SubmitField') %}
+        <label class="label">{{ field.label }}</label>
+    {% endif %}
+    <div class="control">
+    {{ field(**kwargs)|safe }}
+    </div>
+    {% if field.errors %}
+        <span class=errors>
+            {% for error in field.errors %}
+                <p class="help is-danger">
+                {{ error }}
+                </p>
+            {% endfor %}
+        </span>
+    {% endif %}
+</div>
 {% endmacro %}

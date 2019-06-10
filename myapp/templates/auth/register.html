@@ -1,37 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Register</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
-            {% for error in form.email.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=32) }}<br>
-            {% for error in form.password2.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="container">
+        <h1 class="is-size-4">Register</h1>
+        {% from "shared/_macros.html" import render_field %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+            <dl>
+                {{ render_field(form.username, class="input", placeholder="Enter a username") }}
+                {{ render_field(form.email, class="input", placeholder="your-email@iamcool.com") }}
+                {{ render_field(form.password, class="input", placeholder="Enter a password") }}
+                {{ render_field(form.password, class="input", placeholder="Enter a password") }}
+                {{ render_field(form.submit, class="button is-link") }}
+            </dl>
+        </form>
+    </div>
 {% endblock %}

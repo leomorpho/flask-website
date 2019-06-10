@@ -54,8 +54,8 @@ def create_app(config_class=Config):
     from myapp.store import bp as store_bp
     app.register_blueprint(store_bp, url_prefix='/store')
 
-#     from myapp.admin import bp as admin_bp
-#     app.register_blueprint(admin_bp)
+    from myapp.admin import bp as admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     # If not in debug mode, log all errors
     if not app.debug and not app.testing:
