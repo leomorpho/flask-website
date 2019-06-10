@@ -5,6 +5,7 @@ import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from sqlalchemy.orm import validates
 from myapp import db, login
 
 
@@ -40,7 +41,7 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic',), lazy='dynamic')
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User: {}>'.format(self.username)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -123,7 +124,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Post: {}>'.format(self.body)
 
 
 class Product(db.Model):
@@ -139,7 +140,7 @@ class Product(db.Model):
     weight = db.Column(db.Integer)
 
     def __repr__(self):
-        return '<Product {}>'.format(self.name, self.category)
+        return '<Product: {} ({})> \n'.format(self.name, self.category)
 
 
 class ProductCategory(db.Model):
@@ -149,8 +150,10 @@ class ProductCategory(db.Model):
     products = db.relationship('Product', backref='category', lazy='dynamic')
 
     def __repr__(self):
-        return '<ProductCategory {}, {description}>'.format(
+        return '<ProductCategory: {} ({})>'.format(
             self.name, self.description)
+
+
 # Implement the following:
 # Tags for posts
 # Groups for users
