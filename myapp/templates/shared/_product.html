@@ -6,6 +6,18 @@
     </div>
     <div class="card-content">
         <p class="title is-6">{{ product.name }}</p>
-        <p class="subtitle is-7">Subtitle</p>
+        <p class="subtitle is-7">{{ product.description }}</p>
+        {% if current_user.is_authenticated %}
+            <span class="icon edit-product">
+                <a href="{{ url_for('store.edit_product', id=product.id) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </span>
+            <span class="icon delete-product">
+                <a href="{{ url_for('store.delete_product', id=product.id) }}">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </span>
+        {% endif %}
     </div>
 </div>

@@ -14,7 +14,13 @@
                 </div>
             </div>
         </section>
-
+        
+        {% if current_user.is_authenticated %}
+        <section class="container store-admin">
+            <a href="{{ url_for('store.add_product') }}" class="button is-success">Add Product</a> 
+        </section>
+        {% endif %}
+        
         <section class="container products">
             {% if products %}
                 {% for product in products %}

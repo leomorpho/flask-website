@@ -16,7 +16,7 @@ def store():
 
 @bp.route('/add', methods=['GET', 'POST'])
 @login_required
-def create_product():
+def add_product():
     """
     Add a new product to the database
     """
