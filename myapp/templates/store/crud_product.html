@@ -5,15 +5,15 @@
     <div class="container">
         <h1 class="is-size-4">{{ title }}</h1>
         {% from "shared/_macros.html" import render_field %}
-        <form action="" method=post>
+        <form action="" method=post class="form">
             {{ form.hidden_tag() }}
           <dl>
-            {{ render_field(form.name) }}
-            {{ render_field(form.description) }}
-            {{ render_field(form.category) }}
-            {{ render_field(form.weight) }}
+            {{ render_field(form.name, class="input", placeholder="Enter product name") }}
+            {{ render_field(form.description, class="input", placeholder="Enter description") }}
+            {{ render_field(form.category, class="input") }}
+            {{ render_field(form.weight, class="input", placeholder="Enter weight in grams") }}
+            {{ render_field(form.submit, class="button is-link") }}
           </dl>
-            <p>{{ form.submit() }}</p>
         </form>
     </div>
 {% endblock %}
