@@ -18,20 +18,21 @@ def load_user(id):
 # foreign keys of a many-to-many relationship.
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer,
-                               db.ForeignKey('user.id')),
+                               db.ForeignKey('users.id')),
                      db.Column('followed_id', db.Integer,
-                               db.ForeignKey('user.id'))
+                               db.ForeignKey('users.id'))
                      )
 
 
 class User(UserMixin, db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    roles = db.relationship('Role', secondary='user_roles')
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
+#    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     followed = db.relationship(
         'User', secondary=followers,
@@ -102,6 +103,13 @@ class User(UserMixin, db.Model):
 # Define the Role data-model
 
 
+class Permission:
+    BUY = 0x01
+    WRITE_BLOGS = 0x02
+    MODERATE_CONTENT = 0x04
+    ADMINISTER = 0x80
+
+
 class Role(db.Model):
     """
     Role table. A role has an authority number associated to
@@ -113,31 +121,49 @@ class Role(db.Model):
     Roles in the app are simply seen as their name, but their
     associated rank is what is important.
     """
+    __tablename__ = 'roles'
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), unique=True)
+    name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(280))
-    rank = db.Column(db.Integer())
-
-
-class UserRoles(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer(), db.ForeignKey(
-        'user.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey(
-        'role.id', ondelete='CASCADE'))
+#     default = db.Column(db.Boolean, default=False, index=True)
+#     permissions = db.Column(db.Integer)
+#    users = db.relationship('User', backref='role', lazy='dynamic')
+#
+#     @staticmethod
+#     def insert_roles():
+#         roles = {
+#             'Customer': (Permission.BUY, True),
+#             'Moderator': (Permission.BUY |
+#                           Permission.WRITE_BLOGS |
+#                           Permission.MODERATE_CONTENT, False),
+#             'Administrator': (0x80, False)
+#         }
+#         for r in roles:
+#             role = Role.query.filter_by(name=r).first()
+#             if role is None:
+#                 role = Role(name=r)
+#             role.permissions = roles[r][0]
+#             role.default = roles[r][1]
+#             db.session.add(role)
+#         db.session.commit()
 
 
 class Post(db.Model):
+    """
+    Posts table
+    """
+    __tablename__ = "posts"
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return '<Post: {}>'.format(self.body)
 
 
 class Product(db.Model):
+    __tablename__ = "products"
     id = db .Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
@@ -146,7 +172,7 @@ class Product(db.Model):
     # boulangerie, patisserie, viennoiserie, salted, drinks, other
     # If more categories are added, the db products must be updated to
     # reflect the best descripting category
-    category_id = db.Column(db.Integer, db.ForeignKey('product_category.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('product_categories.id'))
     weight = db.Column(db.Integer)
 
     def __repr__(self):
@@ -154,7 +180,8 @@ class Product(db.Model):
 
 
 class ProductCategory(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True)
+    __tablename__ = "product_categories"
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
     description = db.Column(db.String(140))
     products = db.relationship('Product', backref='category', lazy='dynamic')
