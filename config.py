@@ -25,3 +25,5 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['leonard.audibert@gmail.com']
     POSTS_PER_PAGE = 15
+    UPLOAD_FOLDER = '/static/images/'
+    ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

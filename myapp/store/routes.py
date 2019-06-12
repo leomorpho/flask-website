@@ -4,18 +4,22 @@ from myapp.models import Product, ProductCategory
 from myapp.store import bp
 from myapp.store.forms import ProductForm
 from myapp import db
+from myapp.decorators import admin_required, permission_required
+from flask_login import current_user
 
 
 @bp.route('/')
 def store():
     # get all products and present them
     products = Product.query.all()
+    admin = current_user.is_admin()
     return render_template('store/index.html',
-                           title='Store', products=products)
+                           title='Store', products=products, admin=admin)
 
 
 @bp.route('/add', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def add_product():
     """
     Add a new product to the database
@@ -49,6 +53,7 @@ def add_product():
 
 @bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def edit_product(id):
     """
     Edit a product stored in database
@@ -98,6 +103,7 @@ def edit_product(id):
 
 @bp.route('/delete/<id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def delete_product(id):
     """
     Delete a product from the database

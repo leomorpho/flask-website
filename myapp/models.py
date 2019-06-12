@@ -209,6 +209,7 @@ class Product(db.Model):
     id = db .Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
+    image = db.Column(db.String(256))
     thumbnail = db.Column(db.String(256))
     # many-to-one: can be
     # boulangerie, patisserie, viennoiserie, salted, drinks, other
@@ -231,6 +232,23 @@ class ProductCategory(db.Model):
     def __repr__(self):
         return '<ProductCategory: {} ({})>'.format(
             self.name, self.description)
+
+#     @staticmethod
+#     def insert_product_categories():
+#         categories = {
+#             'Boulangerie': "Breads and similar",
+#             'Patisserie': "Sweets, pastry and similar",
+#             'Viennoiserie': "Croissants and similarr",
+#             'Salted': "Sandwiches, soups and similar",
+#         }
+#         for r in categories:
+#             cat = ProductCategory.query.filter_by(name=r).first()
+#             if cat is None:
+#                 cat = ProductCategory(name=r)
+#             cat.description = categories[r][0]
+#             db.session.add(cat)
+#         db.session.commit()
+
 
 
 # Implement the following:
