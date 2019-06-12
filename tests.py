@@ -2,12 +2,13 @@
 from datetime import datetime, timedelta
 import unittest
 from myapp import create_app, db
-from myapp.models import User, Post
+from myapp.models import User, Post, Role, Product, ProductCategory
 from config import Config
 
 
 class TestConfig(Config):
     TESTING = True
+    ADMINS = ['dog@dog.com', 'cat@cat.com']
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
@@ -24,10 +25,22 @@ class UserModelCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_password_hashing(self):
-        u = User(username='susan')
+        u = User(username='joko')
         u.set_password('cat')
         self.assertFalse(u.check_password('dog'))
         self.assertTrue(u.check_password('cat'))
+
+    def test_admin_role(self):
+        Role.insert_roles()
+        u = User(username='joko', email='dog@dog.com')
+        u.set_password('cat')
+        self.assertEqual(u.role.name, 'Administrator')
+
+    def test_customer_role(self):
+        Role.insert_roles()
+        u = User(username='jogo', email='no@dog.com')
+        u.set_password('cat')
+        self.assertEqual(u.role.name, 'Customer')
 
     def test_avatar(self):
         u = User(username='john', email='john@example.com')
@@ -37,7 +50,7 @@ class UserModelCase(unittest.TestCase):
 
     def test_follow(self):
         u1 = User(username='john', email='john@example.com')
-        u2 = User(username='susan', email='susan@example.com')
+        u2 = User(username='joko', email='joko@example.com')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
@@ -48,7 +61,7 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
         self.assertTrue(u1.is_following(u2))
         self.assertEqual(u1.followed.count(), 1)
-        self.assertEqual(u1.followed.first().username, 'susan')
+        self.assertEqual(u1.followed.first().username, 'joko')
         self.assertEqual(u2.followers.count(), 1)
         self.assertEqual(u2.followers.first().username, 'john')
 
@@ -61,7 +74,7 @@ class UserModelCase(unittest.TestCase):
     def test_follow_posts(self):
         # create four users
         u1 = User(username='john', email='john@example.com')
-        u2 = User(username='susan', email='susan@example.com')
+        u2 = User(username='joko', email='joko@example.com')
         u3 = User(username='mary', email='mary@example.com')
         u4 = User(username='david', email='david@example.com')
         db.session.add_all([u1, u2, u3, u4])
@@ -70,7 +83,7 @@ class UserModelCase(unittest.TestCase):
         now = datetime.utcnow()
         p1 = Post(body="post from john", author=u1,
                   timestamp=now + timedelta(seconds=1))
-        p2 = Post(body="post from susan", author=u2,
+        p2 = Post(body="post from joko", author=u2,
                   timestamp=now + timedelta(seconds=4))
         p3 = Post(body="post from mary", author=u3,
                   timestamp=now + timedelta(seconds=3))
@@ -80,9 +93,9 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
 
         # setup the followers
-        u1.follow(u2)  # john follows susan
+        u1.follow(u2)  # john follows joko
         u1.follow(u4)  # john follows david
-        u2.follow(u3)  # susan follows mary
+        u2.follow(u3)  # joko follows mary
         u3.follow(u4)  # mary follows david
         db.session.commit()
 
@@ -108,6 +121,13 @@ class ProductModelCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
+
+    def test_add_product_to_category(self):
+        c = ProductCategory(name='fruits')
+        p = Product(name='apple', category=c)
+        db.session.add(c, p)
+        db.session.commit()
+        self.assertEqual(p.category.name, 'fruits')
 
 
 if __name__ == '__main__':

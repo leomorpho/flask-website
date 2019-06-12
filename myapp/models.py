@@ -45,7 +45,7 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            if self.email == current_app.config['ADMINS']:
+            if self.email in current_app.config['ADMINS']:
                 self.role = Role.query.filter_by(
                     permissions=0xff).first()
             if self.role is None:
@@ -155,14 +155,7 @@ class Permission:
 
 class Role(db.Model):
     """
-    Role table. A role has an authority number associated to
-    it(rank), such that 3 has more power than 4. Authority numbers
-    can be updated to reflect new roles required by the application.
-    Existing role in order of power are:
-    -admin
-    -customer
-    Roles in the app are simply seen as their name, but their
-    associated rank is what is important.
+    Roles are an aggregate of permissions
     """
     __tablename__ = 'roles'
     id = db.Column(db.Integer(), primary_key=True)
@@ -182,7 +175,7 @@ class Role(db.Model):
             'Moderator': (Permission.BUY |
                           Permission.WRITE_BLOGS |
                           Permission.MODERATE_CONTENT, False),
-            'Administrator': (0x80, False)
+            'Administrator': (0xff, False)
         }
         for r in roles:
             role = Role.query.filter_by(name=r).first()
