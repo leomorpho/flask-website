@@ -3,7 +3,7 @@ from flask import current_app
 from time import time
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from hashlib import md5
 from myapp import db, login
 
@@ -32,13 +32,24 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
-#    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic',), lazy='dynamic')
+
+    # Assign default role by default, except if registering user
+    # is an administrator
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == current_app.config['ADMINS']:
+                self.role = Role.query.filter_by(
+                    permissions=0xff).first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
 
     def __repr__(self):
         return '<User: {}>'.format(self.username)
@@ -51,9 +62,23 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
+#   #--------------------
+#   # Permissions
+#   #--------------------
+    def can(self, permissions):
+        # Bitwise AND operation checks if the ressource can be
+        # accessed by the user
+        return self.role is not None and  \
+            (self.role.permissions & permissions) == permissions
+
+    def is_admin(self):
+        return self.can(Permission.ADMINISTER)
+
+#   #--------------------
+#   # Followers
+#   #--------------------
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
@@ -100,7 +125,25 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-# Define the Role data-model
+
+class AnonymousUser(AnonymousUserMixin):
+    """
+    An anonymous user class is added for consistency to check for
+    permissions and roles. In this manner, all current_user can call
+    current_user.can() and .is_admin() without needing to first check
+    if the user is logged in.
+
+    AnonymousUserMixin = Flask-Login class
+    """
+
+    def can(self, permissions):
+        return False
+
+    def is_admin(self):
+        return False
+
+
+login.anonymous_user = AnonymousUser
 
 
 class Permission:
@@ -125,27 +168,30 @@ class Role(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(280))
-#     default = db.Column(db.Boolean, default=False, index=True)
-#     permissions = db.Column(db.Integer)
-#    users = db.relationship('User', backref='role', lazy='dynamic')
-#
-#     @staticmethod
-#     def insert_roles():
-#         roles = {
-#             'Customer': (Permission.BUY, True),
-#             'Moderator': (Permission.BUY |
-#                           Permission.WRITE_BLOGS |
-#                           Permission.MODERATE_CONTENT, False),
-#             'Administrator': (0x80, False)
-#         }
-#         for r in roles:
-#             role = Role.query.filter_by(name=r).first()
-#             if role is None:
-#                 role = Role(name=r)
-#             role.permissions = roles[r][0]
-#             role.default = roles[r][1]
-#             db.session.add(role)
-#         db.session.commit()
+    default = db.Column(db.Boolean, default=False, index=True)
+    permissions = db.Column(db.Integer)
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Role: {}> \n'.format(self.name)
+
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'Customer': (Permission.BUY, True),
+            'Moderator': (Permission.BUY |
+                          Permission.WRITE_BLOGS |
+                          Permission.MODERATE_CONTENT, False),
+            'Administrator': (0x80, False)
+        }
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+            role.permissions = roles[r][0]
+            role.default = roles[r][1]
+            db.session.add(role)
+        db.session.commit()
 
 
 class Post(db.Model):
