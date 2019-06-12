@@ -9,6 +9,8 @@ def permission_required(permission):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
+            # Can use the "can(permissions)" function on anonymous users
+            # because we implemented it for AnonymousUser
             if not current_user.can(permission):
                 abort(403)
             return f(*args, **kwargs)
