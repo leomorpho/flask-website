@@ -2,7 +2,8 @@
 from datetime import datetime, timedelta
 import unittest
 from myapp import create_app, db
-from myapp.models import User, Post, Role, Product, ProductCategory
+from myapp.models import User, Post, Role, Product, ProductCategory, \
+        Permission
 from config import Config
 
 
@@ -36,11 +37,12 @@ class UserModelCase(unittest.TestCase):
         u.set_password('cat')
         self.assertEqual(u.role.name, 'Administrator')
 
-    def test_customer_role(self):
+    def test_anonymous_user_permissions(self):
         Role.insert_roles()
         u = User(username='jogo', email='no@dog.com')
         u.set_password('cat')
-        self.assertEqual(u.role.name, 'Customer')
+        self.assertFalse(u.can(Permission.ADMINISTER))
+        self.assertTrue(u.can(Permission.BUY))
 
     def test_avatar(self):
         u = User(username='john', email='john@example.com')

@@ -15,7 +15,7 @@
             </div>
         </section>
         
-        {% if current_user.is_authenticated %}
+        {% if admin %}
         <section class="container store-admin">
             <a href="{{ url_for('store.add_product') }}" class="button is-success">Add Product</a> 
         </section>
