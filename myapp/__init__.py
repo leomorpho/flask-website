@@ -9,7 +9,7 @@ import logging
 from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
 import os
-import pusher
+# import pusher
 from config import Config
 
 db = SQLAlchemy()
@@ -21,12 +21,12 @@ admin = Admin()
 # that user be logged-in.
 login.login_view = 'auth.login'
 
-pusher = pusher.Pusher(
-    app_id=os.getenv('PUSHER_APP_ID'),
-    key=os.getenv('PUSHER_APP_KEY'),
-    secret=os.getenv('PUSHER_APP_SECRET'),
-    cluster=os.getenv('PUSHER_APP_CLUSTER'),
-    ssl=True)
+# pusher = pusher.Pusher(
+#     app_id=os.getenv('PUSHER_APP_ID'),
+#     key=os.getenv('PUSHER_APP_KEY'),
+#     secret=os.getenv('PUSHER_APP_SECRET'),
+#     cluster=os.getenv('PUSHER_APP_CLUSTER'),
+#     ssl=True)
 
 
 def create_app(config_class=Config):
